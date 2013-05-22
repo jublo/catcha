@@ -396,7 +396,7 @@ class Catcha
     protected function _drawEquation(&$canvas)
     {
         // extract HEX color
-        $foreground_rgb = $this->_colorFromHex($this->_imageColorBackground);
+        $foreground_rgb = $this->_colorFromHex($this->_imageColorForeground);
         extract($foreground_rgb, EXTR_PREFIX_ALL, 'fore');
 
         // assign foreground color
@@ -425,8 +425,8 @@ class Catcha
         }
 
         // get margins
-        $margin_left = rand(0, $this->_imageWidth - $equation_width);
-        $margin_top = rand(0, $this->_imageHeight - $equation_height);
+        $margin_left = rand(2, $this->_imageWidth - $equation_width - 2);
+        $margin_top = rand(2, $this->_imageHeight - $equation_height - 2);
 
         // draw equation
         imagettftext(
@@ -434,7 +434,7 @@ class Catcha
             $font_size,
             0,
             $margin_left,
-            $margin_top,
+            $margin_top + $equation_height,
             $foreground,
             $this->_imageFont,
             $this->_equation
