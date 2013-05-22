@@ -222,7 +222,7 @@ class Catcha
 
         // glue the equation
         $equation = "$operand1 $operation $operand2";
-        $result = eval($equation . ';');
+        eval('$result = ' . $equation . ';');
 
         // add equal sign to displayed challenge
         $equation .= ' =';
