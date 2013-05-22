@@ -31,13 +31,6 @@
 class Catcha
 {
     /**
-     * Challenge equation to ask
-     *
-     * @access protected
-     */
-    protected $_equation;
-
-    /**
      * Font file to use for challenge image
      *
      * @access protected
@@ -57,6 +50,13 @@ class Catcha
      * @access protected
      */
     protected $_imageWidth;
+
+    /**
+     * Challenge equation to ask
+     *
+     * @access protected
+     */
+    protected $_equation;
 
     /**
      * Challenge result
@@ -86,6 +86,16 @@ class Catcha
     }
 
     /**
+     * Get the canvas size of the challenge image
+     *
+     * @return array($width, $height) The canvas size
+     */
+    public function getImageSize()
+    {
+        return array($this->_imageWidth, $this->_imageHeight);
+    }
+
+    /**
      * Set the canvas size of the challenge image
      *
      * @param int $width  The image width (>= 30px)
@@ -105,6 +115,16 @@ class Catcha
         // store given values
         $this->_imageWidth = $width;
         $this->_imageHeight = $height;
+    }
+
+    /**
+     * Get the font file to be used for drawing the challenge characters
+     *
+     * @return string $font_file The full path to font file (*.ttf)
+     */
+    public function getImageFont()
+    {
+        return $this->_imageFont;
     }
 
     /**
@@ -150,11 +170,23 @@ class Catcha
 
         // glue the equation
         $equation = "$operand1 $operation $operand2";
-        $result = eval($equation);
+        $result = eval($equation . ';');
 
         // store all of these generated data
         $this->_equation = $equation;
         $this->_result = $result;
+    }
+
+    /**
+     * Validate the entered result
+     *
+     * @param int $result The result entered by the user
+     *
+     * @return boolean Whether the result is correct
+     */
+    public function isCorrectResult($result)
+    {
+        return $result === $this->_result;
     }
 
     /**
