@@ -172,6 +172,9 @@ class Catcha
         $equation = "$operand1 $operation $operand2";
         $result = eval($equation . ';');
 
+        // add equal sign to displayed challenge
+        $equation .= ' =';
+
         // store all of these generated data
         $this->_equation = $equation;
         $this->_result = $result;
