@@ -261,8 +261,8 @@ class Catcha
 
         // get the drawn image data
         ob_start();
-        imagejpeg($canvas);
-        $image_data = ob_end_clean($canvas);
+        imagejpeg($canvas, null, 70);
+        $image_data = ob_get_contents();
         ob_end_clean();
 
         return $image_data;
@@ -377,7 +377,7 @@ class Catcha
 
         // extract HEX color
         $background_rgb = $this->_colorFromHex($this->_imageColorBackground);
-        extract($background_rgb, EXTR_PREFIX_ALL, 'back_');
+        extract($background_rgb, EXTR_PREFIX_ALL, 'back');
 
         // assign background color
         $background = imagecolorallocate($canvas, $back_r, $back_g, $back_b);
@@ -393,18 +393,21 @@ class Catcha
      *
      * @return void
      */
-    protected function _drawEquation($canvas)
+    protected function _drawEquation(&$canvas)
     {
         // extract HEX color
         $foreground_rgb = $this->_colorFromHex($this->_imageColorBackground);
-        extract($foreground_rgb, EXTR_PREFIX_ALL, 'fore_');
+        extract($foreground_rgb, EXTR_PREFIX_ALL, 'fore');
 
         // assign foreground color
         $foreground = imagecolorallocate($canvas, $fore_r, $fore_g, $fore_b);
 
         // starting size
-        $font_size = 20;
+        $font_size = 32;
         $fits_into_canvas = false;
+
+        $canvas_width = intval(.7 * $this->_imageWidth);
+        $canvas_height = intval(.5 * $this->_imageHeight);
 
         while (! $fits_into_canvas) {
             // find out equation dimensions
@@ -412,11 +415,30 @@ class Catcha
             $equation_width = $dimensions[2] - $dimensions[0];
             $equation_height = $dimensions[3] - $dimensions[5];
 
-            echo $equation_width;
-            die();
+            if ($equation_width > $canvas_width) {
+                $font_size--;
+            } elseif($equation_height > $canvas_height) {
+                $font_size--;
+            } else {
+                $fits_into_canvas = true;
+            }
         }
 
+        // get margins
+        $margin_left = rand(0, $this->_imageWidth - $equation_width);
+        $margin_top = rand(0, $this->_imageHeight - $equation_height);
+
         // draw equation
+        imagettftext(
+            $canvas,
+            $font_size,
+            0,
+            $margin_left,
+            $margin_top,
+            $foreground,
+            $this->_imageFont,
+            $this->_equation
+        );
     }
 }
 
