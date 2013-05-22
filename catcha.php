@@ -4,7 +4,7 @@
  * Catch-a spammer with a CAPTCHA.
  *
  * @package catcha
- * @version 0.1.0-dev
+ * @version 0.1.0
  * @author J.M. <me@mynetx.net>
  * @copyright 2013 J.M. <me@mynetx.net>
  *

@@ -20,3 +20,76 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Please enable the GD extension in your PHP environment.
 
+Getting started
+---------------
+
+1. Generate a challenge
+
+```
+require_once 'catcha.php';
+
+$catcha = new Catcha;
+$catcha->outputImage();
+```
+
+2. Store the Catcha object
+
+```
+$_SESSION['catcha'] = $catcha;
+```
+
+3. After the user enters the solution, restore the object
+
+```
+$catcha = $_SESSION['catcha'];
+```
+
+4. Check if the entered result was correct
+
+```
+$entered_result = -1;
+if (isset($_POST['your_field_name'])) {
+    $entered_result = intval($_POST['your_field_name']);
+}
+$catcha_solved = $catcha->isCorrectResult($entered_result);
+```
+
+Adapting to your needs
+----------------------
+
+### Set a custom challenge canvas image size
+
+```
+$catcha->setImageSize($desired_width, $desired_height);
+```
+
+### Use a custom font
+
+```
+$catcha->setImageFont($path_to_font);
+```
+
+### Paint the canvas in a different color
+
+```
+$catcha->setImageColorBackground('#ffff00');
+```
+
+### Write the equation in a different color
+
+```
+$catcha->setImageColorForeground('#ff0000');
+```
+
+### Generate a new challenge and discard the old one
+
+```
+$catcha->newChallenge();
+```
+
+### Get raw image data without sending to browser
+
+```
+$image_data = $catcha->getImage();
+```
+
