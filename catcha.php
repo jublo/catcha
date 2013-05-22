@@ -4,7 +4,7 @@
  * Catch-a spammer with a CAPTCHA.
  *
  * @package catcha
- * @version 0.1.0
+ * @version 1.0.0
  * @author J.M. <me@mynetx.net>
  * @copyright 2013 J.M. <me@mynetx.net>
  *
@@ -217,12 +217,19 @@ class Catcha
         $operation = $operations[rand(0, count($operations) - 1)];
 
         // get some operands
-        $operand1 = rand(3, 99);
+        if ($operation == '*') {
+            $operand1 = rand(3, 10);
+        } else {
+            $operand1 = rand(3, 99);
+        }
         $operand2 = rand(1, $operand1 - 1);
 
         // glue the equation
         $equation = "$operand1 $operation $operand2";
         eval('$result = ' . $equation . ';');
+
+        // use well-known sign for multiplication
+        $equation = str_replace('*', html_entity_decode('&times;'), $equation);
 
         // add equal sign to displayed challenge
         $equation .= ' =';

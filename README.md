@@ -59,17 +59,29 @@ Adapting to your needs
 
 ### Set a custom challenge canvas image size
 
+The canvas size defaults to 100 x 25 pixels.  Customize the size:
+
 ```
 $catcha->setImageSize($desired_width, $desired_height);
 ```
 
 ### Use a custom font
 
+By default, Catcha uses the Averia Light font licensed under the SIL
+Open Font License Version 1.1 (http://scripts.sil.org/OFL).  
+You may as well use a custom True Type font (*.ttf):
+
 ```
 $catcha->setImageFont($path_to_font);
 ```
 
 ### Paint the canvas in a different color
+
+The supported color codes include (upper- and lower case)
+
+- #ffff00
+- ffff00
+- ff0
 
 ```
 $catcha->setImageColorBackground('#ffff00');
@@ -88,6 +100,8 @@ $catcha->newChallenge();
 ```
 
 ### Get raw image data without sending to browser
+
+The raw image data are in binary JPEG format, quality 80.
 
 ```
 $image_data = $catcha->getImage();
