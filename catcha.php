@@ -193,6 +193,56 @@ class Catcha
     }
 
     /**
+     * Get the challenge image for output or conversion to text
+     *
+     * @param void
+     *
+     * @return binary $image_data The raw JPEG data
+     */
+    public function getImage()
+    {
+        // prepare canvas and colors
+        $canvas = $this->_prepareCanvas();
+
+        // draw the equation
+        $this->_drawEquation($canvas);
+
+        // get the drawn image data
+        ob_start();
+        imagejpeg($canvas);
+        $image_data = ob_end_clean($canvas);
+        ob_end_clean();
+
+        return $image_data;
+    }
+
+    /**
+     * Output the challenge image to the browser
+     *
+     * @param void
+     *
+     * @return void
+     */
+    public function outputImage()
+    {
+        // get the challenge image
+        $image_data = $this->getImage();
+
+        // did somebody already send anything to the browser?
+        if (headers_sent()) {
+            throw new Exception('outputImage: Call before sending data to browser');
+        }
+
+        // send content type for the challenge image
+        header('Content-Type: image/jpeg');
+
+        // send image data to browser
+        echo $image_data;
+
+        // the calling script should avoid sending anything additional
+    }
+
+    /**
      * Check if all required PHP extensions are loaded
      *
      * @param void
@@ -204,6 +254,69 @@ class Catcha
         if (! extension_loaded('gd')) {
             throw new Exception('_checkExtensions: GD missing');
         }
+        // check for freetype
+        $gd_info = gd_info();
+        if ($gd_info['FreeType Support'] !== true) {
+            throw new Exception('_checkExtensions: GD FreeType support missing');
+        }
+    }
+
+    /**
+     * Prepare the canvas, draw its background
+     *
+     * @param void
+     *
+     * @return resource $canvas The prepared canvas
+     */
+    protected function _prepareCanvas()
+    {
+        $canvas = imagecreatetruecolor(
+            $this->_imageWidth,
+            $this->_imageHeight
+        );
+
+        // extract HEX color
+        $background_rgb = $this->_colorFromHex($this->_imageColorBackground);
+        extract($background_rgb, EXTR_PREFIX_ALL, 'back_');
+
+        // assign background color
+        $background = imagecolorallocate($canvas, $back_r, $back_g, $back_b);
+        imagefill($canvas, 0, 0, $background);
+
+        return $canvas;
+    }
+
+    /**
+     * Draw the equation into the canvas
+     *
+     * @param resource $canvas The canvas to draw onto
+     *
+     * @return void
+     */
+    protected function _drawEquation($canvas)
+    {
+        // extract HEX color
+        $foreground_rgb = $this->_colorFromHex($this->_imageColorBackground);
+        extract($foreground_rgb, EXTR_PREFIX_ALL, 'fore_');
+
+        // assign foreground color
+        $foreground = imagecolorallocate($canvas, $fore_r, $fore_g, $fore_b);
+
+        // starting size
+        $font_size = 20;
+        $fits_into_canvas = false;
+
+        while (! $fits_into_canvas) {
+            // find out equation dimensions
+            $dimensions = imagettfbbox($font_size, 0, $this->_imageFont, $this->_equation);
+            $equation_width = $dimensions[2] - $dimensions[0];
+            $equation_height = $dimensions[3] - $dimensions[5];
+
+            echo $equation_width;
+            die();
+        }
+
+        // draw equation
     }
 }
 
