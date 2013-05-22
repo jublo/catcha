@@ -31,6 +31,20 @@
 class Catcha
 {
     /**
+     * Background color for the challenge image
+     *
+     * @access protected
+     */
+    protected $_imageColorBackground;
+
+    /**
+     * Foreground color for the challenge image
+     *
+     * @access protected
+     */
+    protected $_imageColorForeground;
+
+    /**
      * Font file to use for challenge image
      *
      * @access protected
@@ -80,6 +94,8 @@ class Catcha
         // initialize member variables
         $this->setImageSize(100, 25);
         $this->setImageFont(dirname(__FILE__) . '/font/Averia-Light.ttf');
+        $this->setImageColorBackground('FFF');
+        $this->setImageColorForeground('000');
 
         // generate the challenge data
         $this->newChallenge();
@@ -145,6 +161,42 @@ class Catcha
 
         // store given value
         $this->_imageFont = $font_file;
+    }
+
+    /**
+     * Set the background color to use in the challenge image
+     *
+     * @param string $color_back Color to paint the canvas (HEX RGB or RRGGBB)
+     *
+     * @return void
+     */
+    public function setImageColorBackground($color_back)
+    {
+        // validate
+        if (! $color_back = $this->_validateColorHex($color_back)) {
+            throw new Exception('setImageColorBackground: invalid parameters');
+        }
+
+        // store given value
+        $this->_imageColorBackground = $color_back;
+    }
+
+    /**
+     * Set the foreground color to use in the challenge image
+     *
+     * @param string $color_fore Color to draw the equation (HEX RGB or RRGGBB)
+     *
+     * @return void
+     */
+    public function setImageColorForeground($color_fore)
+    {
+        // validate
+        if (! $color_fore = $this->_validateColorHex($color_fore)) {
+            throw new Exception('setImageColorForeground: invalid parameters');
+        }
+
+        // store given value
+        $this->_imageColorForeground = $color_fore;
     }
 
     /**
@@ -259,6 +311,54 @@ class Catcha
         if ($gd_info['FreeType Support'] !== true) {
             throw new Exception('_checkExtensions: GD FreeType support missing');
         }
+    }
+
+    /**
+     * Validate a given hex color
+     *
+     * @param string $color_hex The hex color to validate
+     *
+     * @return (string|FALSE) The validated color
+     */
+    protected function _validateColorHex($color)
+    {
+        if (! preg_match('/^#?([0-9a-f]{3}|[0-9a-f]{6})$/i', $color)) {
+            return false;
+        }
+        if (substr($color, 0, 1) === '#') {
+            $color = substr($color, 1);
+        }
+        // convert to uppercase
+        $color = strtoupper($color);
+
+        // if 3-digit format, expand
+        if (strlen($color) == 3) {
+            $color =
+                str_repeat(substr($color, 0, 1), 2)
+                . str_repeat(substr($color, 1, 1), 2)
+                . str_repeat(substr($color, 2, 1), 2);
+        }
+        return $color;
+    }
+
+    /**
+     * Convert HEX color to R, G, B
+     *
+     * @param string $color_hex The hex color
+     *
+     * @return array('r' => int, 'g' => int, 'b' => int) extracted color values
+     */
+    protected function _colorFromHex($color_hex)
+    {
+        $red = hexdec(substr($color_hex, 0, 2));
+        $green = hexdec(substr($color_hex, 2, 2));
+        $blue = hexdec(substr($color_hex, 4, 2));
+
+        return array(
+            'r' => $red,
+            'g' => $green,
+            'b' => $blue
+        );
     }
 
     /**
