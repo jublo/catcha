@@ -31,6 +31,13 @@
 class Catcha
 {
     /**
+     * Challenge equation to ask
+     *
+     * @access protected
+     */
+    protected $_equation;
+
+    /**
      * Font file to use for challenge image
      *
      * @access protected
@@ -52,6 +59,13 @@ class Catcha
     protected $_imageWidth;
 
     /**
+     * Challenge result
+     *
+     * @access protected
+     */
+    protected $_result;
+
+    /**
      * Class constructor
      *
      * @param void
@@ -60,6 +74,9 @@ class Catcha
      */
     public function __construct()
     {
+        // check for required extensions
+        $this->_checkExtensions();
+
         // initialize member variables
         $this->setImageSize(100, 25);
         $this->setImageFont(dirname(__FILE__) . '/font/Averia-Light.ttf');
@@ -119,7 +136,39 @@ class Catcha
      */
     public function newChallenge()
     {
+        // allowed operations
+        static $operations = array(
+            '+', '-', '*'
+        );
 
+        // decide which operation
+        $operation = $operations[rand(0, count($operations) - 1)];
+
+        // get some operands
+        $operand1 = rand(3, 99);
+        $operand2 = rand(1, $operand1 - 1);
+
+        // glue the equation
+        $equation = "$operand1 $operation $operand2";
+        $result = eval($equation);
+
+        // store all of these generated data
+        $this->_equation = $equation;
+        $this->_result = $result;
+    }
+
+    /**
+     * Check if all required PHP extensions are loaded
+     *
+     * @param void
+     *
+     * @return void
+     */
+    protected function _checkExtensions()
+    {
+        if (! extension_loaded('gd')) {
+            throw new Exception('_checkExtensions: GD missing');
+        }
     }
 }
 
