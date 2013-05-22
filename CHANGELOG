@@ -1,6 +1,9 @@
 catcha - changelog
 ==================
 
+1.0.1 (2013-05-22)
++ Allow to check result with string variables containing the result
+
 1.0.0 (2013-05-22)
 + use easier operands for multiplication
 + use well-known sign for multiplication

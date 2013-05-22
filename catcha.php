@@ -4,7 +4,7 @@
  * Catch-a spammer with a CAPTCHA.
  *
  * @package catcha
- * @version 1.0.0
+ * @version 1.0.1
  * @author J.M. <me@mynetx.net>
  * @copyright 2013 J.M. <me@mynetx.net>
  *
@@ -248,7 +248,7 @@ class Catcha
      */
     public function isCorrectResult($result)
     {
-        return $result === $this->_result;
+        return intval($result) == $this->_result;
     }
 
     /**

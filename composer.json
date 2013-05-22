@@ -1,7 +1,7 @@
 {
     "name": "mynetx/catcha",
     "description" : "Catch-a spammer with a CAPTCHA.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "autoload": {
         "classmap": ["catcha.php"]
     },
