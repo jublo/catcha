@@ -2,7 +2,7 @@ catcha
 ======
 *Catch-a spammer with a CAPTCHA.*
 
-Copyright (C) 2013 J.M. <me@mynetx.net>
+Copyright (C) 2013-2014 Jublo IT Solutions &lt;support@jublo.net&gt;
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -68,7 +68,7 @@ $catcha->setImageSize($desired_width, $desired_height);
 ### Use a custom font
 
 By default, Catcha uses the Averia Light font licensed under the SIL
-Open Font License Version 1.1 (http://scripts.sil.org/OFL).  
+Open Font License Version 1.1 (http://scripts.sil.org/OFL).
 You may as well use a custom True Type font (*.ttf):
 
 ```

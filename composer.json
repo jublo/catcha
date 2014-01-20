@@ -1,5 +1,5 @@
 {
-    "name": "mynetx/catcha",
+    "name": "jublonet/catcha",
     "description" : "Catch-a spammer with a CAPTCHA.",
     "version": "1.0.1",
     "autoload": {

@@ -5,8 +5,8 @@
  *
  * @package catcha
  * @version 1.0.1
- * @author J.M. <me@mynetx.net>
- * @copyright 2013 J.M. <me@mynetx.net>
+ * @author Jublo IT Solutions <support@jublo.net>
+ * @copyright 2013-2014 Jublo IT Solutions <support@jublo.net>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
